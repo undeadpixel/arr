@@ -5,6 +5,7 @@ require 'json'
 
 require 'arr/connection'
 require 'arr/r_object'
+require 'arr/na_class'
 
 module Arr
 

@@ -41,23 +41,15 @@ describe Arr::Connection do
 
     subject { connection.query(query) }
 
-    # TODO: treat each type of data differently (at least basic stuff!!)
-    context 'when R returns a float' do
-      let(:query) { "a = 2; b = 3; a + b" }
+    context 'when passing valid R' do
+      
+      let(:query) { "a = 3; b = 2; a + b" }
+      let(:json_response) { "{\"type\":\"double\",\"attributes\":{},\"value\":[5]}" }
 
-      it('returns a float in ruby') { expect(subject).to eq(5.0) }
-    end
-
-    context 'when R returns a string' do
-      let(:query) { "'hello'" }
-
-      it('returns a string in ruby') { expect(subject).to eq('hello') }
-    end
-    
-    context 'when R returns a boolean' do
-      let(:query) { "FALSE" }
-
-      it('returns a boolean in ruby') { expect(subject).to be false }
+      it 'calls Arr::RObject.factory to convert result' do
+        expect(Arr::RObject).to receive(:factory).with(json_response).and_call_original
+        subject
+      end
     end
 
     context 'when passing invalid R' do

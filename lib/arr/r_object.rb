@@ -1,33 +1,49 @@
 
+require 'arr/r_object/builder'
+
 module Arr
   class RObject
 
-    def self.factory(json)
-      hash = JSON.parse(json)
-      
-      case hash['type']
-      when 'double' then hash['value'].first.to_f
-      when 'character' then hash['value'].first
-      when 'logical' then hash['value'].first == 'true'
-      else RObject.new(json, hash)
+    attr_accessor :r_classes, :attributes
+
+    def self.factory(hash_or_json)
+      hash = hash_or_json
+      hash = JSON.parse(hash) unless hash.is_a? Hash
+
+      Builder.build(hash)
+    end
+
+    def initialize(r_classes, attributes)
+      @r_classes = r_classes
+
+      initialize_attributes(attributes)
+    end
+
+    def is_r_class?(r_class)
+      @r_classes.include?(r_class)
+    end
+
+    def [](attr)
+      value_for_key(attr)
+    end
+
+    def method_missing(method, *args, &block)
+      value_for_key(method.to_s) || super
+    end
+
+    private
+
+    def initialize_attributes(attributes)
+      @attributes = attributes
+      @stringified_attributes = attributes.keys.each_with_object({}) do |attribute,hash|
+        hash[attribute.to_s.gsub('.', '_')] = attribute
       end
     end
 
-    def initialize(json, hash)
-      @json = json
-      @hash = hash
+    def value_for_key(key)
+      key = @stringified_attributes[key] if @stringified_attributes.keys.include?(key)
+      @attributes[key]
     end
 
-    def type
-      @hash['type']
-    end
-
-    def attributes
-      @hash['attributes']
-    end
-
-    def value
-      @hash['value']
-    end
   end
 end

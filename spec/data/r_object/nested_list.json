@@ -1,0 +1,1 @@
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["a","d"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["b","c"]}},"value":[{"type":"double","attributes":{},"value":[2]},{"type":"double","attributes":{},"value":[3]}]},{"type":"double","attributes":{},"value":[4]}]}
