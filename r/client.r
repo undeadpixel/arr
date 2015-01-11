@@ -16,7 +16,7 @@ connectToServer = function(port) {
 
 listenToMessages = function() {
   while(TRUE) {
-    message = readLines(SOCKET, n=1, skipNul=TRUE)
+    message = readLines(SOCKET, n=1)
     # debug('received', message)
     message = try(fromJSON(message), TRUE)
 
@@ -61,7 +61,7 @@ sendMessage = function(message) {
   encoded_message = toJSON(message, auto_unbox=TRUE)
   writeLines(encoded_message, SOCKET)
   flush(SOCKET)
-  debug('sent', encoded_message)
+  # debug('sent', encoded_message)
 }
 
 # process results
